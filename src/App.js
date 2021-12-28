@@ -14,6 +14,9 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [count, setCount] = useState(0);
   const [minting, setMinting] = useState(false);
+  const [alertHead, setAlertHead] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
   const [opensea, setOpensea] = useState("");
   const [etherscan, setEtherscan] = useState("");
   const [buttonText, setButtonText] = useState("Mint NFT💎");
@@ -32,11 +35,26 @@ const App = () => {
     setCount(c.toString());
   };
 
+  const checkNetwork = async () => {
+    const { ethereum } = window;
+
+    let chainId = await ethereum.request({ method: "eth_chainId" });
+    console.log("Connected to chain " + chainId);
+
+    // String, hex code of the chainId of the Rinkebey test network
+    const rinkebyChainId = "0x4";
+    if (chainId !== rinkebyChainId) {
+      setAlertHead(true);
+      setAlertText("You are not connected to the Rinkeby Test Network!");
+    }
+  };
+
   const checkIfWalletIsConnected = async () => {
     const { ethereum } = window;
 
     if (!ethereum) {
-      console.log("Make sure you have metamask!");
+      setAlertHead(true);
+      setAlertText("Get MetaMask!");
       return;
     } else {
       console.log("We have the ethereum object", ethereum);
@@ -54,7 +72,7 @@ const App = () => {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
       setCurrentAccount(account);
-
+      checkNetwork();
       // Setup listener! This is for the case where a user comes to our site
       // and ALREADY had their wallet connected + authorized.
       setupEventListener();
@@ -71,7 +89,8 @@ const App = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        alert("Get MetaMask!");
+        setAlertHead(true);
+        setAlertText("Get MetaMask!");
         return;
       }
 
@@ -87,12 +106,14 @@ const App = () => {
        */
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-
+      checkNetwork();
       // Setup listener! This is for the case where a user comes to our site
       // and ALREADY had their wallet connected + authorized.
       setupEventListener();
     } catch (error) {
       console.log(error);
+      setAlertText("Unable to connect Wallet");
+      setAlertHead(true);
     }
   };
 
@@ -125,7 +146,8 @@ const App = () => {
         getCount();
         console.log("Setup event listener!");
       } else {
-        console.log("Ethereum object doesn't exist!");
+        setAlertText("Ethereum object doesn't exist!");
+        setAlertHead(true);
       }
     } catch (error) {
       console.log(error);
@@ -135,7 +157,8 @@ const App = () => {
   const askContractToMintNft = async () => {
     try {
       const { ethereum } = window;
-
+      setEtherscan("");
+      setOpensea("");
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -152,6 +175,8 @@ const App = () => {
         setButtonText("Mint NFT💎");
         setMinting(true);
         console.log("Mining...please wait.");
+        setAlertHead(false);
+
         await nftTxn.wait();
         setEtherscan(`https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
         setMinting(false);
@@ -161,7 +186,8 @@ const App = () => {
     } catch (error) {
       console.log(error);
       setMinting(false);
-      alert("Try Again Later");
+      setAlertText("Try Again Later");
+      setAlertHead(true);
     }
   };
   // Render Methods
@@ -181,9 +207,19 @@ const App = () => {
     checkIfWalletIsConnected();
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setAlertHead(false);
+    }, 10000);
+  }, [alertHead]);
+
   return (
     <div className="App">
       <div className="container">
+        <div className={`fixed-container ${alertHead ? "add-alert" : ""}`}>
+          <p>{alertText}</p>
+        </div>
+        {/* <button onClick={() => setAlertHead(true)}>alert</button> */}
         <div className="header-container">
           <p className="header gradient-text">My NFT Collection</p>
           {currentAccount && (
