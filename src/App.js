@@ -14,6 +14,9 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [count, setCount] = useState(0);
   const [minting, setMinting] = useState(false);
+  const [opensea, setOpensea] = useState("");
+  const [etherscan, setEtherscan] = useState("");
+  const [buttonText, setButtonText] = useState("Mint NFT💎");
   const getCount = async () => {
     const { ethereum } = window;
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -115,8 +118,8 @@ const App = () => {
         connectedContract.on("NewEpicNFTMinted", (from, tokenId) => {
           console.log(from, tokenId.toNumber());
           getCount();
-          alert(
-            `Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
+          setOpensea(
+            `https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
           );
         });
         getCount();
@@ -143,20 +146,22 @@ const App = () => {
         );
 
         console.log("Going to pop wallet now to pay gas...");
+
+        setButtonText("Opening Metamask");
         let nftTxn = await connectedContract.makeAnEpicNFT();
+        setButtonText("Mint NFT💎");
         setMinting(true);
         console.log("Mining...please wait.");
         await nftTxn.wait();
-
-        console.log(
-          `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
-        );
+        setEtherscan(`https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
         setMinting(false);
       } else {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
       console.log(error);
+      setMinting(false);
+      alert("Try Again Later");
     }
   };
   // Render Methods
@@ -193,17 +198,32 @@ const App = () => {
           {currentAccount === "" ? (
             renderNotConnectedContainer()
           ) : (
-            <button 
+            <button
               onClick={askContractToMintNft}
-              className={`cta-button connect-wallet-button ${minting?"minting":""}`}
+              className={`cta-button connect-wallet-button ${
+                minting ? "minting" : ""
+              }`}
             >
-              {minting ? "Minting..⛏️" : "Mint NFT💎 "}
+              {minting ? `Minting..⛏️` : buttonText}
             </button>
           )}
-          <div className="mined-details">
-            <a className="external-links" href="#">Transaction🚀</a><br/>
-            <a className="external-links" href="#">Opensea 🌊</a>
-          </div>
+          {opensea && (
+            <div
+              className={`mined-details ${etherscan ? "mined-animation" : ""}`}
+            >
+              {etherscan && (
+                <a className="external-links" href={etherscan} target="_blank">
+                  Transaction🚀
+                </a>
+              )}
+              <br />
+              {opensea && (
+                <a className="external-links" href={opensea} target="_blank">
+                  Opensea 🌊
+                </a>
+              )}
+            </div>
+          )}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />

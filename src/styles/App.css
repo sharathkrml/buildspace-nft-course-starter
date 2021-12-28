@@ -62,7 +62,7 @@
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
 }
-.minting{
+.minting {
   background: -webkit-linear-gradient(left, #60c657, #35aee2);
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
@@ -137,4 +137,29 @@
   100% {
     background-position: 0% 50%;
   }
+}
+.mined-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: min(400px, 60%);
+  margin: 0 auto;
+}
+.mined-animation {
+  animation: down-grow 1s ease-in-out forwards;
+}
+@keyframes down-grow {
+  0%{
+    transform: translateY(0) scale(0);
+  }
+  100% {
+    transform: translateY(15vh) scale(1);
+  }
+}
+.external-links {
+  color: white;
+  text-decoration: none;
+}
+.external-links:hover {
+  transform: scale(1.1);
 }
