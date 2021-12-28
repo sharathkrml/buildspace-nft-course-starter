@@ -13,7 +13,7 @@ const CONTRACT_ADDRESS = "0xD198A59A4125d409cCc666551a9a36D496a25803";
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [count, setCount] = useState(0);
-
+  const [minting, setMinting] = useState(false);
   const getCount = async () => {
     const { ethereum } = window;
     const provider = new ethers.providers.Web3Provider(ethereum);
@@ -25,6 +25,7 @@ const App = () => {
     );
 
     let c = await connectedContract.getCount();
+    console.log(c.toString());
     setCount(c.toString());
   };
 
@@ -113,6 +114,7 @@ const App = () => {
         // If you're familiar with webhooks, it's very similar to that!
         connectedContract.on("NewEpicNFTMinted", (from, tokenId) => {
           console.log(from, tokenId.toNumber());
+          getCount();
           alert(
             `Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
           );
@@ -142,13 +144,14 @@ const App = () => {
 
         console.log("Going to pop wallet now to pay gas...");
         let nftTxn = await connectedContract.makeAnEpicNFT();
-
+        setMinting(true);
         console.log("Mining...please wait.");
         await nftTxn.wait();
 
         console.log(
           `Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
         );
+        setMinting(false);
       } else {
         console.log("Ethereum object doesn't exist!");
       }
@@ -178,19 +181,29 @@ const App = () => {
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">My NFT Collection</p>
+          {currentAccount && (
+            <div className="acc-details">
+              <p className="address">Account:{currentAccount}</p>
+              <p className="address">Your NFTs:{count}/50</p>
+            </div>
+          )}
           <p className="sub-text">
             Each unique. Each beautiful. Discover your NFT today.
           </p>
           {currentAccount === "" ? (
             renderNotConnectedContainer()
           ) : (
-            <button
+            <button 
               onClick={askContractToMintNft}
-              className="cta-button connect-wallet-button"
+              className={`cta-button connect-wallet-button ${minting?"minting":""}`}
             >
-              Mint NFT
+              {minting ? "Minting..⛏️" : "Mint NFT💎 "}
             </button>
           )}
+          <div className="mined-details">
+            <a className="external-links" href="#">Transaction🚀</a><br/>
+            <a className="external-links" href="#">Opensea 🌊</a>
+          </div>
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
