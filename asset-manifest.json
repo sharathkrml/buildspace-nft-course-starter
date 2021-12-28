@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/buildspace-nft-course-starter/static/css/main.637e29e7.chunk.css",
-    "main.js": "/buildspace-nft-course-starter/static/js/main.f6827267.chunk.js",
-    "main.js.map": "/buildspace-nft-course-starter/static/js/main.f6827267.chunk.js.map",
+    "main.css": "/buildspace-nft-course-starter/static/css/main.0ef220a6.chunk.css",
+    "main.js": "/buildspace-nft-course-starter/static/js/main.52a4b8d5.chunk.js",
+    "main.js.map": "/buildspace-nft-course-starter/static/js/main.52a4b8d5.chunk.js.map",
     "runtime-main.js": "/buildspace-nft-course-starter/static/js/runtime-main.339f186d.js",
     "runtime-main.js.map": "/buildspace-nft-course-starter/static/js/runtime-main.339f186d.js.map",
-    "static/js/2.65496aec.chunk.js": "/buildspace-nft-course-starter/static/js/2.65496aec.chunk.js",
-    "static/js/2.65496aec.chunk.js.map": "/buildspace-nft-course-starter/static/js/2.65496aec.chunk.js.map",
+    "static/js/2.22b535f5.chunk.js": "/buildspace-nft-course-starter/static/js/2.22b535f5.chunk.js",
+    "static/js/2.22b535f5.chunk.js.map": "/buildspace-nft-course-starter/static/js/2.22b535f5.chunk.js.map",
     "index.html": "/buildspace-nft-course-starter/index.html",
-    "static/css/main.637e29e7.chunk.css.map": "/buildspace-nft-course-starter/static/css/main.637e29e7.chunk.css.map",
-    "static/js/2.65496aec.chunk.js.LICENSE.txt": "/buildspace-nft-course-starter/static/js/2.65496aec.chunk.js.LICENSE.txt",
+    "static/css/main.0ef220a6.chunk.css.map": "/buildspace-nft-course-starter/static/css/main.0ef220a6.chunk.css.map",
+    "static/js/2.22b535f5.chunk.js.LICENSE.txt": "/buildspace-nft-course-starter/static/js/2.22b535f5.chunk.js.LICENSE.txt",
     "static/media/twitter-logo.a8a75254.svg": "/buildspace-nft-course-starter/static/media/twitter-logo.a8a75254.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.339f186d.js",
-    "static/js/2.65496aec.chunk.js",
-    "static/css/main.637e29e7.chunk.css",
-    "static/js/main.f6827267.chunk.js"
+    "static/js/2.22b535f5.chunk.js",
+    "static/css/main.0ef220a6.chunk.css",
+    "static/js/main.52a4b8d5.chunk.js"
   ]
 }
